@@ -111,8 +111,10 @@ repo_type = os.environ.get("REPO_TYPE", "model")
 def new_session(backend):
     """backend is 'requests' or 'curl_cffi'."""
     if backend == "curl_cffi" and _HAVE_CURL_CFFI:
-        return _curl_cffi_mod.Session(impersonate="chrome")
+        # Enforce a modern Chrome fingerprint to bypass abrupt TLS termination
+        return _curl_cffi_mod.Session(impersonate="chrome120")
     return _requests_mod.Session()
+
 
 
 # Used for the GitHub handoff calls, which never showed a problem in testing;
